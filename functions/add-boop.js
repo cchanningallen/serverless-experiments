@@ -1,4 +1,4 @@
-const { hasuraRequest } = require('./util/hasura');
+const { hasuraRequest } = require("./util/hasura");
 
 exports.handler = async (event) => {
   const { id } = JSON.parse(event.body);
