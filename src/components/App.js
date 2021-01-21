@@ -62,7 +62,7 @@ class App extends React.Component {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data === []) {
+        if (data.length === 0) {
           // Mutation failed - roll back optimistic update
           this._updateCorgiByID(id, { boops: oldBoops });
         } else {
@@ -77,14 +77,31 @@ class App extends React.Component {
   }
 
   _updateCorgiByID(id, updated) {
+    let needsUpdate = false;
     const corgis = this.state.corgis.map((corgi) => {
       if (corgi.id === id) {
-        return { ...corgi, ...updated };
+        const updatedCorgi = { ...corgi, ...updated };
+        if (!this._areCorgisEqual(corgi, updatedCorgi)) {
+          needsUpdate = true;
+        }
+        return updatedCorgi;
       }
+
       return corgi;
     });
 
-    this.setState({ corgis });
+    if (needsUpdate) {
+      this.setState({ corgis });
+    }
+  }
+
+  _areCorgisEqual(corgi1, corgi2) {
+    const corgi1Keys = Object.keys(corgi1);
+    const corgi2Keys = Object.keys(corgi2);
+    if (corgi1Keys.length !== corgi2Keys.length) {
+      return false;
+    }
+    return corgi1Keys.every((k) => corgi1[k] === corgi2[k]);
   }
 }
 
