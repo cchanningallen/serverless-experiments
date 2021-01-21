@@ -5,15 +5,16 @@ exports.handler = async (event) => {
 
   const data = await hasuraRequest({
     query: `
-      mutation UpdateBoopCount($id: String!) {
-        updated: update_boops_by_pk(pk_columns: {id: $id}, _inc: {count: 1}) {
+      mutation MyMutation($id:String!) {
+        updated: update_boops_by_pk(pk_columns: {id:$id}, _inc: {count: 1}) {
+          boops: count
           id
-          count
         }
       }
     `,
     variables: { id },
   });
+  console.log({ data });
 
   return {
     statusCode: 200,
