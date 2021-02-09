@@ -1,7 +1,8 @@
 const fetch = require("node-fetch");
 const { hasuraRequest } = require("./util/hasura");
 
-exports.handler = async () => {
+exports.handler = async (event) => {
+  console.log({event})
   const corgis = await fetch(
     "https://no-cors-api.netlify.app/api/corgis"
   ).then((res) => res.json());
@@ -53,6 +54,7 @@ exports.handler = async () => {
     statusCode: 200,
     headers: {
       "Content-Type": "application/json",
+      "access-control-allow-origin": "*"
     },
     body: JSON.stringify(completeData),
   };
